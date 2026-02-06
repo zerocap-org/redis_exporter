@@ -6,12 +6,17 @@ on:
       - 'v*'
 
 jobs:
-  release-binaries:
-    runs-on: ubuntu-latest
 
+  package_dpkg:
+    name: Package for Debian/Ubuntu
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+
+      - name: Fix Checkout
+        run: |
+          git fetch --force --tags
 
       - name: Setup Go
         uses: actions/setup-go@v6
@@ -19,18 +24,13 @@ jobs:
           go-version: '1.25'
 
       - name: Build binaries
-        run: |
-          make build
-          ls -la
-          ls -la .build/
-          ./package-github-binaries.sh
-          ls -la dist/
+        run: make build
 
-      - name: Add binaries to release
-        uses: ncipollo/release-action@v1
+      - name: Build
+        run: make dpkg
+
+      - name: Upload dpkg
+        uses: actions/upload-artifact@v4
         with:
-          artifacts: "dist/*"
-          allowUpdates: true
-          omitBodyDuringUpdate: true
-
-
+          name: packages-dpkg
+          path: "*.deb"
