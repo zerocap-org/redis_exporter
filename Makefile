@@ -128,6 +128,7 @@ install:
 	install -p redis_exporter $(INSTALLDIR)
 
 BUILD_DEP:= \
+    build-essential \
 	debhelper \
 	devscripts \
 	golang \
