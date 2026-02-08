@@ -105,3 +105,41 @@ build-all-binaries:
 	gox -os="linux freebsd netbsd"                        -arch="arm"       -verbose -rebuild -ldflags $(GO_LDFLAGS) -output ".build/redis_exporter-${GITHUB_REF_NAME}.{{.OS}}-{{.Arch}}/{{.Dir}}" && \
 	gox -os="linux" -arch="arm64 mips64 mips64le ppc64 ppc64le s390x"       -verbose -rebuild -ldflags $(GO_LDFLAGS) -output ".build/redis_exporter-${GITHUB_REF_NAME}.{{.OS}}-{{.Arch}}/{{.Dir}}" && \
 	echo "done"
+
+PACKAGE:=redis-exporter
+VERSION:=$(shell git describe --dirty)
+BUILD_DATE?=$(shell git log -1 --format=%cI)
+
+BUILD_USER?=$(USER)
+BUILD_SHA?=$(GITHUB_SHA)
+BUILD_BRANCH?=$(GITHUB_REF_NAM)
+
+DESTDIR?=installdir
+INSTALLDIR:=$(DESTDIR)/usr/sbin
+ETCDIR:=$(DESTDIR)/etc
+
+DEB?=$(shell find . -name "*.deb" -print -quit)
+
+install:
+	mkdir -p $(INSTALLDIR)
+	## no config file for this?
+	#mkdir -p $(ETCDIR)
+	install -p redis_exporter $(INSTALLDIR)
+
+BUILD_DEP:= \
+	debhelper \
+	devscripts \
+	golang \
+
+.PHONY: build-dep
+build-dep:
+	sudo apt install $(BUILD_DEP)
+
+redis_exporter:
+	go build .
+
+dpkg:
+	rm -f debian/changelog
+	dch --create --empty --package $(PACKAGE) -v ${VERSION}-0 --no-auto-nmu local package Auto Build
+	dpkg-buildpackage -rfakeroot -us -uc
+	mv ../*.deb ./
