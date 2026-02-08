@@ -113,6 +113,7 @@ BUILD_DATE?=$(shell git log -1 --format=%cI)
 BUILD_USER?=$(USER)
 BUILD_SHA?=$(GITHUB_SHA)
 BUILD_BRANCH?=$(GITHUB_REF_NAM)
+EMAIL?=sre-admin@zerocap.com
 
 DESTDIR?=installdir
 INSTALLDIR:=$(DESTDIR)/usr/sbin
