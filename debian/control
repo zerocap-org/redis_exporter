@@ -1,0 +1,12 @@
+Source: redis-exporter
+Section: utils
+Priority: optional
+Maintainer: Paul Morahan <paul.morahan@zerocap.com>
+Standards-Version: 4.6.0
+Build-Depends:
+ golang,
+
+Package: redis-exporter
+Architecture: any
+Depends:
+Description: Export Redis metrics for prometheus

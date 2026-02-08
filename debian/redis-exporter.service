@@ -1,0 +1,12 @@
+[Unit]
+Description=Redis metrics exporter for Prometheus
+After=network-online.target
+
+[Service]
+# configure targets with env vars in a drop-in
+ExecStart=/usr/sbin/redis-exporter
+Restart=always
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target
