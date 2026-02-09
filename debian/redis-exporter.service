@@ -4,7 +4,7 @@ After=network-online.target
 
 [Service]
 # configure targets with env vars in a drop-in
-ExecStart=/usr/sbin/redis-exporter
+ExecStart=/usr/sbin/redis_exporter
 Restart=always
 ProtectSystem=full
 
