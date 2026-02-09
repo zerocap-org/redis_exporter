@@ -3,8 +3,9 @@
 DOCKER_COMPOSE := $(if $(shell which docker-compose),docker-compose,docker compose)
 
 .PHONY: build
-build:
-	go build .
+build: redis_exporter
+    ## upstream content
+	#go build .
 
 
 .PHONY: docker-all
