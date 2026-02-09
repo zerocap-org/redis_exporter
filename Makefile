@@ -143,6 +143,6 @@ redis_exporter:
 
 dpkg:
 	rm -f debian/changelog
-	dch --create --empty --always --package $(PACKAGE) -v ${VERSION}-0 --no-auto-nmu local package Auto Build
+	dch --create --empty --package $(PACKAGE) -v ${VERSION}-0 --no-auto-nmu local package Auto Build
 	dpkg-buildpackage -rfakeroot -us -uc
 	mv ../*.deb ./
