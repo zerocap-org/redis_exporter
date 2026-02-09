@@ -141,8 +141,13 @@ BUILD_DEP:= \
 build-dep:
 	sudo apt install $(BUILD_DEP)
 
+# fake a sha if not in github
+GITHUB_SHA?=$(shell git rev-parse --short HEAD)
+# Original repo's GO_LDFLAGS but using our own 'version'
+ZC_GO_LDFLAGS:="-s -w -extldflags \"-static\" -X main.BuildVersion=${VERSION} -X main.BuildCommitSha=${GITHUB_SHA} -X main.BuildDate=$(BUILD_DT)"
+
 redis_exporter:
-	go build .
+	go build -ldflags $(ZC_GO_LDFLAGS) .
 
 dpkg:
 	rm -f debian/changelog
