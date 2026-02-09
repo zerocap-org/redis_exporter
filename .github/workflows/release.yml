@@ -53,7 +53,7 @@ jobs:
       - name: Build binary
         run: make redis_exporter
 
-      - name: Build
+      - name: Build dpkg
         run: make dpkg
 
       - name: Upload dpkg
